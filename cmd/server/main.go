@@ -22,6 +22,7 @@ func main() {
 	http.HandleFunc("/.well-known/openid-configuration", handlers.DiscoveryHandler(issuer))
 	http.HandleFunc("/jwks.json", handlers.JWKSHandler(jwk))
 	http.HandleFunc("/authorize", handlers.AuthorizeHandler())
+	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/token", handlers.TokenHandler(handlers.TokenHandlerDeps{
 		PrivateKey: privKey,
 		Issuer:     issuer,

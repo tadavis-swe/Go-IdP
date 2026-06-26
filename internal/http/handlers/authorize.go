@@ -6,6 +6,7 @@ import (
 	"net/url"
 
 	"IdP/internal/auth/tokens"
+	"IdP/internal/session"
 )
 
 func AuthorizeHandler() http.HandlerFunc {
@@ -34,12 +35,15 @@ func AuthorizeHandler() http.HandlerFunc {
 		}
 
 		// TODO: validate client_id and redirect_uri against registered clients
-		// For now, we trust them.
+		user, ok := session.GetUser(r)
+		if !ok {
+			http.Redirect(w, r, "/login?redirect="+url.QueryEscape(r.URL.String()), http.StatusFound)
+			return
+		}
 
-		// Fake user for MVP
-		userID := "user-123"
+		_ = user
 
-		ac, err := tokens.GenerateAuthCode(clientID, userID, redirectURI)
+		ac, err := tokens.GenerateAuthCode(clientID, user, redirectURI)
 		if err != nil {
 			log.Println("failed to generate auth code:", err)
 			http.Error(w, "server error", http.StatusInternalServerError)
