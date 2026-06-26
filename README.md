@@ -1,4 +1,6 @@
 # IdP — OAuth2 / OpenID Connect Identity Provider (Go)
+![Go Version](https://img.shields.io/github/go-mod/go-version/tadavis-swe/Go-IdP)
+
 
 This project is a lightweight OAuth2 / OIDC Identity Provider written in Go.  
 It implements the Authorization Code flow end‑to‑end, including:
