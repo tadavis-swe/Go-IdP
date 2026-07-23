@@ -1,6 +1,8 @@
 package main
 
 import (
+	"IdP/database"
+	"IdP/internal/models"
 	"bytes"
 	"fmt"
 	"io"
@@ -10,6 +12,13 @@ import (
 )
 
 func main() {
+	if err := database.Connect(); err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
+
+	database.DB.AutoMigrate(&models.User{}, &models.Client{})
+
+	// Start Server
 	http.HandleFunc("/cb", func(w http.ResponseWriter, r *http.Request) {
 		code := r.URL.Query().Get("code")
 		state := r.URL.Query().Get("state")
